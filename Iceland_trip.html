@@ -207,11 +207,26 @@
         async function loadAllData() {
             try {
                 const fetchOptions = { cache: 'no-cache' };
+
+                const itineraryUrl = 'itinerary.csv';
+                const accommodationUrl = 'accommodation.csv';
+                const guideUrl = 'guide.json';
+
                 const [itineraryResponse, accommodationResponse, guideResponse] = await Promise.all([
-                    fetch('itinerary.csv', fetchOptions).catch(e => ({ ok: false, status: e.toString() })),
-                    fetch('accommodation.csv', fetchOptions).catch(e => ({ ok: false, status: e.toString() })),
-                    fetch('guide.json', fetchOptions).catch(e => ({ ok: false, status: e.toString() }))
+                    fetch(itineraryUrl, fetchOptions).catch(e => ({ ok: false, status: e.toString() })),
+                    fetch(accommodationUrl, fetchOptions).catch(e => ({ ok: false, status: e.toString() })),
+                    fetch(guideUrl, fetchOptions).catch(e => ({ ok: false, status: e.toString() }))
                 ]);
+
+                if (!itineraryResponse.ok) {
+                     console.error(`Failed to load itinerary data from: ${itineraryUrl}`);
+                }
+                 if (!accommodationResponse.ok) {
+                     console.error(`Failed to load accommodation data from: ${accommodationUrl}`);
+                }
+                 if (!guideResponse.ok) {
+                     console.error(`Failed to load guide data from: ${guideUrl}`);
+                }
 
                 if (!itineraryResponse.ok || !accommodationResponse.ok || !guideResponse.ok) {
                     throw new Error(`One or more data files failed to load. 
