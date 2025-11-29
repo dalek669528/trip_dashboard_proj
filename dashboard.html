@@ -3,530 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>德奧之旅 2025 - 行程儀表板</title>
+    <title></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            color: #E5E7EB; /* gray-200 */
-        }
-        .background-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            /* 建議更換為一張歐洲冬季或慕尼黑/維也納的背景圖，目前維持原圖但調暗 */
-            background-image: url('https://images.unsplash.com/photo-1533423929014-a3939f435889?q=80&w=2670&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: -1;
-            filter: brightness(0.5);
-        }
-        .main-container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-        @media (min-width: 640px) {
-            .main-container {
-                padding: 2rem;
-            }
-        }
-        .glass-card {
-            background: rgba(17, 24, 39, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-        }
-        .day-tab {
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .day-tab.active {
-            background-color: #3B82F6;
-            color: white;
-        }
-        .day-tab:not(.active):hover {
-             background-color: #374151;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 1.125rem;
-            top: 1.5rem;
-            bottom: -0.5rem;
-            width: 2px;
-            background-color: #4B5563;
-            transform: translateX(-50%);
-        }
-        .timeline-item:last-child::before {
-            display: none;
-        }
-        .timeline-dot {
-            position: absolute;
-            left: 1.125rem;
-            top: 1.5rem;
-            width: 1rem;
-            height: 1rem;
-            border-radius: 9999px;
-            background-color: #4B5563;
-            border: 2px solid #1F2937;
-            transform: translateX(-50%);
-        }
-        .tabs-container::-webkit-scrollbar {
-            height: 6px;
-        }
-        .tabs-container::-webkit-scrollbar-track {
-            background: #1F2937;
-            border-radius: 10px;
-        }
-        .tabs-container::-webkit-scrollbar-thumb {
-            background: #4B5563;
-            border-radius: 10px;
-        }
-        .tabs-container::-webkit-scrollbar-thumb:hover {
-            background: #6B7280;
-        }
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            margin: 5% auto;
-            padding: 2rem;
-            width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .modal-content h3 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 1rem;
-        }
-        .modal-content h4 {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #93C5FD; /* blue-300 */
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .modal-content p {
-            color: #D1D5DB; /* gray-300 */
-            line-height: 1.75;
-            margin-bottom: 1rem;
-        }
-        .modal-content ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            color: #D1D5DB;
-        }
-        .modal-content b {
-            color: #F9A8D4; /* pink-300 */
-        }
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            color: #9CA3AF;
-            font-size: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        .modal-close:hover {
-            color: #F9FAFB;
-        }
-    </style>
+    <!-- 讀取設定檔 -->
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body class="bg-gray-900">
 
+    <!-- 背景圖片容器 -->
     <div class="background-container"></div>
 
+    <!-- 主要內容容器 -->
     <div class="main-container">
+        <!-- 頁首區塊 -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">德奧之旅 2025</h1>
-            <p class="text-base sm:text-lg text-gray-300 mt-2">慕尼黑 · 薩爾斯堡 · 維也納</p>
+            <h1 id="main-title" class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight"></h1>
+            <p id="main-subtitle" class="text-base sm:text-lg text-gray-300 mt-2"></p>
         </header>
 
+        <!-- 日期導覽頁籤 -->
         <nav class="mb-8">
             <div id="day-tabs" class="tabs-container flex items-center space-x-2 overflow-x-auto pb-2">
-                </div>
+                <!-- 頁籤將由 JavaScript 動態生成 -->
+            </div>
         </nav>
 
+        <!-- 主要內容顯示區 -->
         <main id="content-display" class="glass-card p-4 sm:p-6 md:p-8">
+            <!-- 初始載入狀態，成功後會被每日詳情取代 -->
             <div id="loading-state" class="flex flex-col justify-center items-center h-full min-h-[40vh] text-center">
-                <h2 class="text-2xl font-bold text-white">歡迎來到您的德奧行程儀表板</h2>
+                <h2 id="welcome-message" class="text-2xl font-bold text-white"></h2>
                 <p class="text-lg text-gray-400 mt-2">請從上方選擇一天來查看詳細行程。</p>
             </div>
         </main>
         
+        <!-- 頁尾 -->
         <footer class="text-center mt-8 text-gray-400 text-sm">
-            <p>行程規劃與深度指南</p>
+            <p id="footer-text"></p>
         </footer>
     </div>
     
+    <!-- 指南資訊彈出視窗 (Modal) -->
     <div id="guide-modal" class="modal">
         <div class="modal-content glass-card">
             <span class="modal-close">&times;</span>
             <div id="modal-body">
-                </div>
+                <!-- Modal 內容將由 JavaScript 動態插入 -->
+            </div>
         </div>
     </div>
-
-    <script>
-        // --- GLOBAL DATA STORE ---
-        // This will be populated by our data loading function
-        let guideContent = {};
-
-        // --- DATA LOADING & PARSING ---
-
-        async function loadAllData() {
-            try {
-                const fetchOptions = { cache: 'no-cache' };
-
-                const itineraryUrl = 'itinerary.csv';
-                const accommodationUrl = 'accommodation.csv';
-                const guideUrl = 'guide.json';
-
-                const [itineraryResponse, accommodationResponse, guideResponse] = await Promise.all([
-                    fetch(itineraryUrl, fetchOptions).catch(e => ({ ok: false, status: e.toString() })),
-                    fetch(accommodationUrl, fetchOptions).catch(e => ({ ok: false, status: e.toString() })),
-                    fetch(guideUrl, fetchOptions).catch(e => ({ ok: false, status: e.toString() }))
-                ]);
-
-                if (!itineraryResponse.ok) {
-                     console.error(`Failed to load itinerary data from: ${itineraryUrl}`);
-                }
-                 if (!accommodationResponse.ok) {
-                     console.error(`Failed to load accommodation data from: ${accommodationUrl}`);
-                }
-                 if (!guideResponse.ok) {
-                     console.error(`Failed to load guide data from: ${guideUrl}`);
-                }
-
-                if (!itineraryResponse.ok || !accommodationResponse.ok || !guideResponse.ok) {
-                    throw new Error(`One or more data files failed to load. 
-                        Itinerary: ${itineraryResponse.status}, 
-                        Accommodation: ${accommodationResponse.status}, 
-                        Guide: ${guideResponse.status}`);
-                }
-                
-                const itineraryText = await itineraryResponse.text();
-                const accommodationText = await accommodationResponse.text();
-                const guideJson = await guideResponse.json();
-
-                return { 
-                    itineraryData: parseItinerary(itineraryText),
-                    accommodationMap: parseAccommodation(accommodationText),
-                    guideData: guideJson 
-                };
-
-            } catch (error) {
-                console.error("Could not load data from external files.", error);
-                // In a real-world scenario, you might load fallback data here.
-                // For now, we will let the main initialization logic handle the error display.
-                throw error;
-            }
-        }
-
-        function parseCsvLine(line) {
-            const parts = [];
-            let currentField = '';
-            let inQuotes = false;
-            for (let i = 0; i < line.length; i++) {
-                const char = line[i];
-                if (char === '"' && (i === 0 || line[i-1] !== '"')) {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    parts.push(currentField);
-                    currentField = '';
-                } else {
-                    currentField += char;
-                }
-            }
-            parts.push(currentField);
-            return parts.map(field => field.trim().replace(/^"|"$/g, '').replace(/""/g, '"'));
-        }
-        
-        function parseItinerary(csvString) {
-            const lines = csvString.trim().split(/\r?\n/);
-            const tripData = [];
-            let currentDayData = null;
-            const dayHeaderRegex = /^第(.+?)天：(.+?)\s*[-－–—]\s*(.+?)(,)*$/;
-
-            lines.forEach(line => {
-                const dayMatch = line.match(dayHeaderRegex);
-                if (dayMatch) {
-                    if (currentDayData) tripData.push(currentDayData);
-                    currentDayData = {
-                        day: dayMatch[1].trim(),
-                        date: dayMatch[2].trim().replace('（', ' (').replace('）', ')'),
-                        title: dayMatch[3].trim(),
-                        events: []
-                    };
-                } else if (currentDayData && line.trim() && !line.startsWith('時間,行程')) {
-                    const parts = parseCsvLine(line);
-                    if (parts.length >= 2 && parts[1] && parts[1].trim()) {
-                        currentDayData.events.push({
-                            time: parts[0] || 'N/A',
-                            activity: parts[1] || 'N/A',
-                            notes: parts[4] || '',
-                            guideKey: parts[5] || '',
-                            googleMapLink: parts[6] || ''
-                        });
-                    }
-                }
-            });
-            if (currentDayData) tripData.push(currentDayData);
-            return tripData;
-        }
-
-        function parseAccommodation(csvString) {
-            const lines = csvString.trim().split(/\r?\n/);
-            const accommodationMap = {};
-            for(let i=1; i < lines.length; i++) {
-                const line = lines[i];
-                if (!line.trim()) continue;
-                const parts = parseCsvLine(line);
-                if (parts.length < 10) continue;
-                const [dateRange, region, platform, roomType, breakfast, kitchen, parking, link, address, mapLink] = parts;
-                if (!dateRange || !dateRange.trim()) continue;
-                
-                const accommodation = { region, platform, name: link, roomType, parking, kitchen, breakfast, address, mapLink };
-
-                const [startDateStr, endDateStr] = dateRange.split('-');
-                if (!startDateStr) continue;
-
-                const [startMonth, startDay] = startDateStr.split('/').map(Number);
-                const [endMonth, endDay] = endDateStr ? endDateStr.split('/').map(Number) : [startMonth, startDay];
-
-                let currentDate = new Date(2025, startMonth - 1, startDay);
-                let endDate = new Date(2025, endMonth - 1, endDay);
-                
-                while(currentDate <= endDate) {
-                    const key = `${currentDate.getMonth() + 1}/${currentDate.getDate()}`;
-                    accommodationMap[key] = accommodation;
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-            }
-            return accommodationMap;
-        }
-
-        // --- DOM ELEMENTS ---
-        const dayTabsContainer = document.getElementById('day-tabs');
-        const contentDisplay = document.getElementById('content-display');
-        const modal = document.getElementById('guide-modal');
-        const modalBody = document.getElementById('modal-body');
-        const closeModalBtn = document.querySelector('.modal-close');
-
-        // --- RENDERING LOGIC ---
-        function renderDayDetails(dayData, accommodationData) {
-            const itineraryHtml = `
-                <div class="mb-8 lg:mb-0">
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center">
-                        <i data-lucide="list-checks" class="w-6 h-6 mr-3 text-blue-400"></i>
-                        行程安排
-                    </h3>
-                    <div class="relative pl-8">
-                        ${dayData.events.map(event => {
-                            // Find precise or partial match for guide key
-                            const guideKey = Object.keys(guideContent).find(key => event.guideKey && event.guideKey.includes(key));
-                            return `
-                            <div class="timeline-item relative pl-8 pb-8">
-                                <div class="timeline-dot"></div>
-                                <p class="text-blue-300 font-semibold">${event.time}</p>
-                                <h4 class="text-lg font-semibold text-gray-100 mt-1 flex items-center">
-                                    ${event.activity}
-                                    ${guideKey ? `<button class="guide-btn inline-block ml-3 text-yellow-400 hover:text-yellow-300" data-guide-key="${guideKey}"><i data-lucide="book-open" class="w-5 h-5"></i></button>` : ''}
-                                    ${event.googleMapLink ? `<a href="${event.googleMapLink}" target="_blank" rel="noopener noreferrer" class="inline-block ml-3 text-blue-400 hover:text-blue-300"><i data-lucide="map-pin" class="w-5 h-5"></i></a>` : ''}
-                                </h4>
-                                ${event.notes ? `<p class="text-gray-400 mt-1 text-sm">${event.notes}</p>` : ''}
-                            </div>
-                        `}).join('')}
-                    </div>
-                </div>`;
-            
-            const accommodationHtml = accommodationData ? `
-                <div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center">
-                        <i data-lucide="home" class="w-6 h-6 mr-3 text-green-400"></i>
-                        今晚住宿
-                    </h3>
-                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg border border-gray-700">
-                        <div class="flex justify-between items-start">
-                             <h4 class="text-lg sm:text-xl font-bold text-white">${accommodationData.region}</h4>
-                             <span class="text-sm font-medium ${accommodationData.platform === 'AirBnb' ? 'bg-pink-600' : 'bg-blue-600'} text-white px-2 py-1 rounded-full">${accommodationData.platform}</span>
-                        </div>
-                        <p class="text-gray-300 mt-1 mb-4 font-semibold text-sm sm:text-base">${accommodationData.name}</p>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mt-4">
-                            <div class="flex items-start">
-                                <i data-lucide="bed-double" class="w-4 h-4 mr-2 mt-1 text-gray-400 flex-shrink-0"></i>
-                                <div><span class="font-semibold text-gray-300">房型:</span> ${accommodationData.roomType || 'N/A'}</div>
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="parking-circle" class="w-4 h-4 mr-2 text-gray-400"></i>
-                                <span class="font-semibold text-gray-300 mr-2">停車:</span>
-                                ${(accommodationData.parking && accommodationData.parking.toLowerCase().includes('v')) ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-green-400"></i>'
-                                    : ((accommodationData.parking && accommodationData.parking.toLowerCase().includes('x')) ? '<i data-lucide="x-circle" class="w-4 h-4"></i>'
-                                        : (accommodationData.parking))
-                                }
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="soup" class="w-4 h-4 mr-2 text-gray-400"></i>
-                                <span class="font-semibold text-gray-300 mr-2">廚房:</span> 
-                                ${(accommodationData.kitchen && accommodationData.kitchen.toLowerCase().includes('v')) ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-green-400"></i>'
-                                    : ((accommodationData.kitchen && accommodationData.kitchen.toLowerCase().includes('x')) ? '<i data-lucide="x-circle" class="w-4 h-4"></i>'
-                                        : (accommodationData.kitchen))
-                                }
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="croissant" class="w-4 h-4 mr-2 text-gray-400"></i>
-                                <span class="font-semibold text-gray-300 mr-2">早餐:</span>
-                                ${(accommodationData.breakfast && accommodationData.breakfast.toLowerCase().includes('v')) ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-green-400"></i>'
-                                    : ((accommodationData.breakfast && accommodationData.breakfast.toLowerCase().includes('x')) ? '<i data-lucide="x-circle" class="w-4 h-4"></i>'
-                                        : (accommodationData.breakfast))
-                                }
-                            </div>
-                        </div>
-
-                        <a href="${accommodationData.mapLink}" target="_blank" rel="noopener noreferrer" class="mt-6 flex items-center text-blue-400 hover:text-blue-300 transition-colors duration-200 text-sm">
-                           <i data-lucide="map-pin" class="w-4 h-4 mr-2"></i>
-                           <span class="underline">${accommodationData.address}</span>
-                        </a>
-                    </div>
-                </div>
-            ` : `
-                 <div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center">
-                        <i data-lucide="moon-star" class="w-6 h-6 mr-3 text-purple-400"></i>
-                        今晚住宿
-                    </h3>
-                    <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
-                        <p class="text-gray-400">今天為返程日或無預定住宿。</p>
-                    </div>
-                </div>
-            `;
-
-            contentDisplay.innerHTML = `
-                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-1">第 ${dayData.day} 天: ${dayData.title}</h2>
-                <p class="text-base sm:text-lg text-gray-400 mb-6 sm:mb-8">${dayData.date}</p>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    ${itineraryHtml}
-                    ${accommodationHtml}
-                </div>
-            `;
-            lucide.createIcons();
-            addGuideButtonListeners();
-        }
-        
-        // --- EVENT LISTENERS & INITIALIZATION ---
-        
-        function openGuideModal(key) {
-            const data = guideContent[key];
-            if (data) {
-                modalBody.innerHTML = `<h3>${data.title}</h3>${data.content}`;
-                modal.style.display = "block";
-            }
-        }
-
-        function addGuideButtonListeners() {
-            document.querySelectorAll('.guide-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    openGuideModal(btn.dataset.guideKey);
-                });
-            });
-        }
-
-        closeModalBtn.onclick = () => {
-            modal.style.display = "none";
-        };
-        
-        window.onclick = (event) => {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const { itineraryData, accommodationMap, guideData } = await loadAllData();
-                guideContent = guideData; // Populate global guide content
-                
-                if (itineraryData.length === 0) {
-                    throw new Error("Parsing itinerary data resulted in an empty array.");
-                }
-                
-                dayTabsContainer.innerHTML = ''; 
-
-                itineraryData.forEach((day, index) => {
-                    const tab = document.createElement('button');
-                    tab.className = 'day-tab px-4 py-2 rounded-lg text-sm font-semibold bg-gray-800 text-gray-300 border border-gray-700';
-                    tab.innerHTML = `第 ${day.day} 天 <span class="hidden sm:inline-block ml-2 text-gray-400">${day.date.split(' ')[0]}</span>`;
-                    tab.onclick = () => {
-                        document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-                        tab.classList.add('active');
-                        
-                        const dateParts = day.date.match(/(\d+)\s*月\s*(\d+)/);
-                        let accommodationDataForDay = null;
-                        if(dateParts) {
-                            const key = `${parseInt(dateParts[1])}/${parseInt(dateParts[2])}`;
-                            accommodationDataForDay = accommodationMap[key];
-                        }
-                        renderDayDetails(day, accommodationDataForDay);
-                    };
-                    dayTabsContainer.appendChild(tab);
-                });
-                
-                // --- 自動跳轉至當天行程 ---
-                const today = new Date();
-                const currentMonth = today.getUTCMonth() + 1; 
-                const currentDay = today.getUTCDate();
-                const todayFormatted = `${currentMonth} 月 ${currentDay} 日`;
-
-                let todayIndex = -1;
-                itineraryData.forEach((day, index) => {
-                    if (day.date.startsWith(todayFormatted)) {
-                        todayIndex = index;
-                    }
-                });
-
-                if (todayIndex !== -1 && dayTabsContainer.children[todayIndex]) {
-                    dayTabsContainer.children[todayIndex].click();
-                } else if (dayTabsContainer.firstElementChild) {
-                    dayTabsContainer.firstElementChild.click();
-                }
-
-            } catch (error) {
-                 console.error("Initialization failed:", error);
-                 contentDisplay.innerHTML = `
-                    <div class="flex flex-col justify-center items-center h-full min-h-[40vh] text-center">
-                        <i data-lucide="alert-triangle" class="w-12 h-12 text-red-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-red-300">載入行程資料時發生錯誤</h3>
-                        <p class="text-gray-400 mt-2">請確認 CSV 和 JSON 檔案都存在且格式正確。</p>
-                        <p class="text-xs text-gray-500 mt-4">${error.message}</p>
-                    </div>`;
-                 lucide.createIcons();
-            }
-        });
-    </script>
+    <script src="dashboard.js"></script>
 </body>
 </html>

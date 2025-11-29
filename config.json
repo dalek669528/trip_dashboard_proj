@@ -1,0 +1,13 @@
+{
+  "tripTitle": "德奧之旅",
+  "tripYear": "2025",
+  "pageTitle": "行程儀表板",
+  "mainSubtitle": "行程總覽儀表板",
+  "welcomeMessage": "歡迎來到您的行程儀表板",
+  "footerText": "行程規劃與深度指南",
+  "itineraryFileName": "itinerary.csv",
+  "accommodationFileName": "accommodation.csv",
+  "guideFileName": "guide.json",
+  "backgroundImageUrl": "https://tinybackpacker.com/wp-content/uploads/2021/03/%E5%BE%B7%E5%9C%8B%E8%81%96%E8%AA%95%E5%B8%82%E9%9B%86.jpg",
+  "useCache": false
+}
