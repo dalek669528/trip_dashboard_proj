@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>冰島之旅 2025 - 行程儀表板</title>
+    <title>德奧之旅 2025 - 行程儀表板</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -18,6 +18,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
+            /* 建議更換為一張歐洲冬季或慕尼黑/維也納的背景圖，目前維持原圖但調暗 */
             background-image: url('https://images.unsplash.com/photo-1533423929014-a3939f435889?q=80&w=2670&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -160,24 +161,19 @@
     <div class="background-container"></div>
 
     <div class="main-container">
-        <!-- Header -->
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">冰島之旅 2025</h1>
-            <p class="text-base sm:text-lg text-gray-300 mt-2">行程總覽儀表板</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">德奧之旅 2025</h1>
+            <p class="text-base sm:text-lg text-gray-300 mt-2">慕尼黑 · 薩爾斯堡 · 維也納</p>
         </header>
 
-        <!-- Day Navigation Tabs -->
         <nav class="mb-8">
             <div id="day-tabs" class="tabs-container flex items-center space-x-2 overflow-x-auto pb-2">
-                <!-- Day tabs will be dynamically inserted here -->
-            </div>
+                </div>
         </nav>
 
-        <!-- Content Display Area -->
         <main id="content-display" class="glass-card p-4 sm:p-6 md:p-8">
-            <!-- Initial state will be rendered here by script -->
             <div id="loading-state" class="flex flex-col justify-center items-center h-full min-h-[40vh] text-center">
-                <h2 class="text-2xl font-bold text-white">歡迎來到您的冰島行程儀表板</h2>
+                <h2 class="text-2xl font-bold text-white">歡迎來到您的德奧行程儀表板</h2>
                 <p class="text-lg text-gray-400 mt-2">請從上方選擇一天來查看詳細行程。</p>
             </div>
         </main>
@@ -187,13 +183,11 @@
         </footer>
     </div>
     
-    <!-- Modal for Guide Content -->
     <div id="guide-modal" class="modal">
         <div class="modal-content glass-card">
             <span class="modal-close">&times;</span>
             <div id="modal-body">
-                <!-- Guide content will be injected here -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -353,7 +347,8 @@
                     </h3>
                     <div class="relative pl-8">
                         ${dayData.events.map(event => {
-                            const guideKey = Object.keys(guideContent).find(key => event.guideKey.includes(key));
+                            // Find precise or partial match for guide key
+                            const guideKey = Object.keys(guideContent).find(key => event.guideKey && event.guideKey.includes(key));
                             return `
                             <div class="timeline-item relative pl-8 pb-8">
                                 <div class="timeline-dot"></div>
@@ -368,7 +363,7 @@
                         `}).join('')}
                     </div>
                 </div>`;
-            console.log(accommodationData)
+            
             const accommodationHtml = accommodationData ? `
                 <div>
                     <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center">
@@ -496,39 +491,28 @@
                             const key = `${parseInt(dateParts[1])}/${parseInt(dateParts[2])}`;
                             accommodationDataForDay = accommodationMap[key];
                         }
-                        console.log(day)
-                        console.log(day.date)
-                        console.log(dateParts)
-
                         renderDayDetails(day, accommodationDataForDay);
                     };
                     dayTabsContainer.appendChild(tab);
                 });
                 
-                // --- 自動跳轉至當天行程 (使用 UTC 以確保時區正確) ---
+                // --- 自動跳轉至當天行程 ---
                 const today = new Date();
-                // 冰島時區為 GMT(UTC+0)，我們使用 UTC 方法來獲取日期，避免裝置本地時區的影響
-                const currentMonth = today.getUTCMonth() + 1; // getUTCMonth() 是從 0 開始的
+                const currentMonth = today.getUTCMonth() + 1; 
                 const currentDay = today.getUTCDate();
                 const todayFormatted = `${currentMonth} 月 ${currentDay} 日`;
 
                 let todayIndex = -1;
-                // 在所有行程資料中尋找符合今天日期的行程
                 itineraryData.forEach((day, index) => {
                     if (day.date.startsWith(todayFormatted)) {
                         todayIndex = index;
                     }
                 });
 
-                // --- 點擊對應的分頁 ---
                 if (todayIndex !== -1 && dayTabsContainer.children[todayIndex]) {
-                    // 如果在旅途中，則點擊當天的分頁
                     dayTabsContainer.children[todayIndex].click();
                 } else if (dayTabsContainer.firstElementChild) {
-                    // 如果不在旅途中 (例如旅行前或後)，則預設顯示第一天
                     dayTabsContainer.firstElementChild.click();
-                } else {
-                    throw new Error("No itinerary data to display.");
                 }
 
             } catch (error) {
@@ -537,7 +521,7 @@
                     <div class="flex flex-col justify-center items-center h-full min-h-[40vh] text-center">
                         <i data-lucide="alert-triangle" class="w-12 h-12 text-red-400 mb-4"></i>
                         <h3 class="text-xl font-bold text-red-300">載入行程資料時發生錯誤</h3>
-                        <p class="text-gray-400 mt-2">請確認 itinerary.csv, accommodation.csv, 和 guide.json 檔案都存在於同一個目錄下，並且格式正確。</p>
+                        <p class="text-gray-400 mt-2">請確認 CSV 和 JSON 檔案都存在且格式正確。</p>
                         <p class="text-xs text-gray-500 mt-4">${error.message}</p>
                     </div>`;
                  lucide.createIcons();
@@ -546,4 +530,3 @@
     </script>
 </body>
 </html>
-
