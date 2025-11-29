@@ -496,6 +496,10 @@
                             const key = `${parseInt(dateParts[1])}/${parseInt(dateParts[2])}`;
                             accommodationDataForDay = accommodationMap[key];
                         }
+                        console.log(day)
+                        console.log(day.date)
+                        console.log(dateParts)
+
                         renderDayDetails(day, accommodationDataForDay);
                     };
                     dayTabsContainer.appendChild(tab);
