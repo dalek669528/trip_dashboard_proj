@@ -161,7 +161,7 @@ function parseItinerary(csvString) {
     const lines = csvString.trim().split(/\r?\n/);
     const tripData = [];
     let currentDayData = null;
-    const dayHeaderRegex = /^第(.+?)天：(.+?)\s*[-－–—]\s*(.+?)(,)*$/;
+    const dayHeaderRegex = /^第(.+?)天：(.+?)\s*(,)\s*(.+?)(,)*$/;
 
     lines.forEach(line => {
         const dayMatch = line.match(dayHeaderRegex);
@@ -170,7 +170,7 @@ function parseItinerary(csvString) {
             currentDayData = {
                 day: dayMatch[1].trim(),
                 date: dayMatch[2].trim().replace('（', ' (').replace('）', ')'),
-                title: dayMatch[3].trim(),
+                title: dayMatch[4].trim(),
                 events: []
             };
         } else if (currentDayData && line.trim() && !line.startsWith('時間,行程')) {
