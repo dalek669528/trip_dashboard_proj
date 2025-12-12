@@ -463,7 +463,7 @@ function getAccommodationForDay(dayDate, accommodationMap) {
 function createDayTab(day, accommodationMap) {
     const tab = document.createElement('button');
     tab.className = 'day-tab px-4 py-2 rounded-lg text-sm font-semibold bg-gray-800 text-gray-300 border border-gray-700';
-    tab.innerHTML = `第 ${day.day} 天 <span class="hidden sm:inline-block ml-2 text-gray-400">${day.date.split(' ')[0]}</span>`;
+    tab.innerHTML = `第 ${day.day} 天 <span class="hidden sm:inline-block ml-2 text-gray-400">${day.date.split(' ')[0]}/${day.date.split(' ')[2]}</span>`;
 
     tab.onclick = () => {
         console.log("DEBUG: 點擊了頁籤:", day.day);
